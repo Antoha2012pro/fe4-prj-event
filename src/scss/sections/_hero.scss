@@ -1,0 +1,107 @@
+.hero {
+    padding: 78px 0px 52px 0px;
+
+    @media (min-width: 610px) {
+        padding: 40px 0px 123px 0px;
+    }
+
+    @media (min-width: 946px) {
+        padding: 40px 0px 133px 0px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 52px;
+    }
+
+    &__title {
+        color: $main-title-color;
+        font-size: 18px;
+        font-weight: 900;
+        text-align: center;
+        width: 100%;
+        max-width: 589px;
+
+        @media (min-width: 610px) {
+            font-size: 30px;
+        }
+
+        @media (min-width: 946px) {
+            font-size: 50px;
+        }
+    }
+
+    &__inps {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+
+        @media (min-width: 610px) {
+            flex-direction: row;
+            gap: 30px;
+        }
+
+        @media (min-width: 946px) {}
+
+        &-box {
+            display: flex;
+            width: 100%;
+            max-width: 270px;
+            flex: 1;
+            position: relative;
+
+            &-input {
+                padding: 10px 0px 10px 30px;
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                background-color: $input-color;
+                border: none;
+                outline: none;
+                width: 100%;
+
+                &::placeholder {
+                    color: $copywright-color;
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+
+                &:hover,
+                &:focus {
+                    opacity: .8;
+                }
+            }
+
+            &-img {
+                fill: $copywright-color;
+                width: 13px;
+                height: 13px;
+                position: absolute;
+                top: 50%;
+                right: 30px;
+                transform: translateY(-50%);
+                width: 12px;
+                height: 12px;
+            }
+
+            &:last-child {}
+
+            &:last-child &-input {}
+
+            &:last-child &-btn {
+                position: absolute;
+                top: 50%;
+                right: 30px;
+                transform: translateY(-50%);
+                width: 12px;
+                height: 12px;
+            }
+
+            &:last-child &-items {
+                position: absolute;
+            }
+        }
+    }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVENTS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./scss/main.scss">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container"></div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2 class="hero__title">FIND BEST EVENTS AROUND THE WORLD</h2>
+                <div class="hero__inps">
+                    <div class="hero__inps-box">
+                        <input type="text" class="hero__inps-box-input" placeholder="Start searching">
+                        <svg class="hero__inps-box-img">
+                            <use href="#"></use>
+                        </svg>
+                    </div>
+                    <div class="hero__inps-box hero__inps-box-search">
+                        <input type="text" class="hero__inps-box-input" placeholder="Choose country"
+                            autocomplete="off" />
+
+                        <button class="hero__inps-box-btn">
+                            <svg class="hero__inps-box-img">
+                                <use href="#"></use>
+                            </svg>
+                        </button>
+                        <ul class="hero__inps-box-items" hidden>
+                            <li class="hero__inps-box-item" data-value="Ukraine">Ukraine</li>
+                            <li class="hero__inps-box-item" data-value="Germany">Germany</li>
+                            <li class="hero__inps-box-item" data-value="Poland">Poland</li>
+                            <li class="hero__inps-box-item" data-value="France">France</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cards">
+            <div class="container">
+                <ul class="cards__items">
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="./index.js"></script>
+</body>
+
+</html>

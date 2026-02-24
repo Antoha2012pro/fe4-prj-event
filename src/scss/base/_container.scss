@@ -1,0 +1,20 @@
+.container {
+    width: 100%;
+    max-width: 946px;
+    margin: 0 auto;
+    padding: 0 15px;
+    outline: 1px solid red;
+    transition: 500ms;
+
+    @media (min-width: 280px) {
+        max-width: 280px;
+    }
+
+    @media (min-width: 610px) {
+        max-width: 610px;
+    }
+
+    @media (min-width: 946px) {
+        max-width: 946px;
+    }
+}
