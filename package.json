@@ -23,7 +23,10 @@
     "parcel": "^2.16.4"
   },
   "dependencies": {
+    "debounce": "^3.0.0",
+    "lodash": "^4.17.23",
     "modern-normalize": "^3.0.1",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "throttle": "^1.0.3"
   }
 }

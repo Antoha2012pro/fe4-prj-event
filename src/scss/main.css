@@ -196,6 +196,7 @@ body {
   height: 12px;
 }
 .hero__inps-box:last-child .hero__inps-box-btn {
+  background-color: red;
   position: absolute;
   top: 50%;
   right: 30px;
@@ -205,8 +206,19 @@ body {
 }
 .hero__inps-box:last-child .hero__inps-box-items {
   position: absolute;
+  width: 100%;
+  top: calc(100% + 5px);
+  right: 5px;
+  z-index: 9;
+  padding: 10px 40px 10px 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.2);
+  display: block;
 }
-
+.hero__inps-box:last-child .hero__inps-box-items--hidden {
+  display: none;
+}
 .cards__items {
   display: flex;
   flex-wrap: wrap;
@@ -247,8 +259,12 @@ body {
 }
 .cards__item-img {
   width: 100%;
-  max-width: 128px;
+  max-width: 180px;
   border-radius: 50px 0px 50px 0px;
+  max-height: 227px;
+  aspect-ratio: 9/16;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .cards__item-title {
   width: 100%;
@@ -277,4 +293,6 @@ body {
   color: #FFFFFF;
   font-size: 12px;
   font-weight: 600;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }/*# sourceMappingURL=main.css.map */

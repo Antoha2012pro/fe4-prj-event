@@ -1,8 +1,6 @@
 .cards {
 
-    .container {
-
-    }
+    .container {}
 
     &__items {
         display: flex;
@@ -41,8 +39,11 @@
 
         &-img {
             width: 100%;
-            max-width: 128px;
+            max-width: 180px;
             border-radius: 50px 0px 50px 0px;
+            max-height: 227px;
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
         }
 
         &-title {
@@ -75,6 +76,8 @@
                 color: $main-text-color;
                 font-size: 12px;
                 font-weight: 600;
+                overflow-wrap: anywhere;
+                word-break: break-word;
             }
         }
     }

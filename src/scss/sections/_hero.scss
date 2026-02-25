@@ -91,6 +91,7 @@
             &:last-child &-input {}
 
             &:last-child &-btn {
+                background-color: red;
                 position: absolute;
                 top: 50%;
                 right: 30px;
@@ -101,6 +102,22 @@
 
             &:last-child &-items {
                 position: absolute;
+                width: 100%;
+                top: calc(100% + 5px);
+                right: 5px;
+                z-index: 9;
+                padding: 10px 40px 10px 40px;
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                background-color: $input-color;
+                display: block;
+            }
+
+            &:last-child &-items--hidden {
+                display: none;
+            }
+
+            &:last-child &-item {
             }
         }
     }
