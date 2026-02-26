@@ -16,7 +16,8 @@ const els = {
         cardsItems: document.querySelector('.cards__items'),
         heroInpsBoxInputSearch: document.querySelector("#heroSearchBtn"),
         heroInpsBoxItems: document.querySelector(".hero__inps-box-items"),
-        heroInpsBoxBtn: document.querySelector(".hero__inps-box-btn"),
+        heroInpsBoxBtnSearch: document.querySelector("#heroInpsBoxBtnSearch"),
+        heroInpsBoxBtnCountry: document.querySelector("#heroInpsBoxBtnCountry"), // document.querySelector(".hero__inps-box-btn"),
         heroInpsBoxInputCountry: document.querySelector("#heroCountryBtn"),
     }
 };
@@ -90,7 +91,7 @@ const renderItems = (data) => {
 };
 
 const renderCountries = (events) => {
-    const seen = new Set(); 
+    const seen = new Set();
     const view = [];
 
     for (const e of events) {
@@ -125,17 +126,29 @@ const chooseCountryLocation = (items, btn, isHiddenDef, isHiddenList) => {
     });
 }
 
-chooseCountryLocation(els.notRender.heroInpsBoxItems, els.notRender.heroInpsBoxBtn, true, false);
+chooseCountryLocation(els.notRender.heroInpsBoxItems, els.notRender.heroInpsBoxBtnCountry, true, false);
 
 const inputsRender = () => {
+    els.notRender.heroInpsBoxBtnSearch.disabled = true;
+
     els.notRender.heroInpsBoxInputCountry.addEventListener("input", debounce((event) => {
-        const query = event.target.value.trim();
-        if (query.length > 2) {
-            chooseCountryLocation(els.notRender.heroInpsBoxItems, els.notRender.heroInpsBoxBtn, true, true);
-        };
+        const isActive = event.target.value.trim().length > 2;
+
+        if (!isActive) return;
+        chooseCountryLocation(els.notRender.heroInpsBoxItems, els.notRender.heroInpsBoxBtnCountry, true, true);
         runSearch();
     }, 500));
-    els.notRender.heroInpsBoxInputSearch.addEventListener("input", debounce(runSearch, 500));
+    els.notRender.heroInpsBoxInputSearch.addEventListener("input", debounce((event) => {
+        const isActive = event.target.value.trim().length > 2;
+
+        els.notRender.heroInpsBoxBtnSearch.classList.toggle("hero__inps-box-btn--active", isActive);
+
+        els.notRender.heroInpsBoxBtnSearch.disabled = !isActive;
+    }, 500));
+    els.notRender.heroInpsBoxBtnSearch.addEventListener("click", () => {
+        if (els.notRender.heroInpsBoxBtnSearch.disabled) return;
+        runSearch();
+    });
 }
 
 const runSearch = () => {

@@ -69,30 +69,89 @@
                 }
             }
 
-            &-img {
-                fill: $copywright-color;
-                width: 13px;
-                height: 13px;
-                position: absolute;
-                top: 50%;
-                right: 30px;
-                transform: translateY(-50%);
-                width: 12px;
-                height: 12px;
-            }
+            // &-img {
+            //     fill: $copywright-color;
+            //     width: 13px;
+            //     height: 13px;
+            //     position: absolute;
+            //     top: 50%;
+            //     right: 30px;
+            //     transform: translateY(-50%);
+            //     width: 12px;
+            //     height: 12px;
+            // }
 
             &:last-child {}
 
             &:last-child &-input {}
 
-            &:last-child &-btn {
-                background-color: red;
+            &:first-child &-btn {
+                fill: $copywright-color;
+                padding: 8px 15px 8px 15px;
+
+                &:disabled {
+                    cursor: not-allowed;
+                    background-color: transparent;
+                }
+
+                &:disabled:hover,
+                &:disabled:focus {
+                    background-color: transparent;
+                }
+
+                &--active {
+                    background-color: $main-title-color;
+
+                    .hero__inps-box-img {
+                        fill: white;
+                    }
+                }
+
+                &:hover,
+                &:focus {
+                    background-color: $main-title-color;
+                }
+            }
+
+            &-btn {
                 position: absolute;
                 top: 50%;
                 right: 30px;
                 transform: translateY(-50%);
+                padding: 9px 10px 5px 10px;
+                border-radius: 5px;
+                z-index: 0;
+                background-color: transparent;
+                transition: 250ms;
+
+                &:hover,
+                &:focus {
+                    background-color: $main-bcg-btn-color;
+                }
+            }
+
+            &:first-child &-img {
+                position: static;
+                top: auto;
+                right: auto;
+                transform: none;
+                margin: auto 0px auto 0px;
+                z-index: 9;
                 width: 12px;
                 height: 12px;
+                fill: $copywright-color;
+            }
+
+            &-img {
+                position: static;
+                top: auto;
+                right: auto;
+                transform: none;
+                margin: auto 0px auto 0px;
+                z-index: 9;
+                width: 15px;
+                height: 10px;
+                fill: $copywright-color;
             }
 
             &:last-child &-items {
@@ -114,10 +173,19 @@
                 display: flex;
                 flex-direction: column;
                 gap: 7px;
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transition: 250ms;
+                transform: translateX(-50%) translateY(0px);
             }
 
             &:last-child &-items--hidden {
-                display: none;
+                opacity: 0;
+                transform: translateX(-50%) translateY(-6px);
+                visibility: hidden;
+                pointer-events: none;
+                transition: 250ms;
             }
 
             &:last-child &-item {
