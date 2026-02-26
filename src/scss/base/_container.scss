@@ -3,7 +3,7 @@
     max-width: 946px;
     margin: 0 auto;
     padding: 0 15px;
-    outline: 1px solid red;
+    @include outline();
     transition: 500ms;
 
     @media (min-width: 280px) {

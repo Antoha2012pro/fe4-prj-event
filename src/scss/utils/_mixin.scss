@@ -1,0 +1,33 @@
+@mixin font($family: Montserrat) {
+    @if $family == Montserrat {
+        font-family: "Montserrat", sans-serif;
+    }
+
+    @else if $family == Tektur {
+        font-family: "Tektur", sans-serif;
+    }
+}
+
+@mixin text($size: 18px, $weight: 900, $align: null, $width: null, $color: $main-text-color, $family: null) {
+    font-size: $size;
+    font-weight: $weight;
+    color: $color;
+
+    @if $width != null {
+        width: $width;
+    }
+
+    @if $align != null {
+        text-align: $align;
+    }
+
+    @if $family != null {
+        @include font($family);
+    }
+}
+
+@mixin outline($isActive: false) {
+    @if $isActive != false {  
+        outline: 1px solid red; 
+    }
+}

@@ -20,10 +20,13 @@
   "homepage": "https://github.com/Antoha2012pro/fe4-prj-event#readme",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.16.4",
-    "parcel": "^2.16.4"
+    "parcel": "^2.16.4",
+    "parcel-plugin-handlebars-precompile": "^1.0.2",
+    "parcel-transformer-hbs": "^1.0.4"
   },
   "dependencies": {
     "debounce": "^3.0.0",
+    "handlebars": "^4.7.8",
     "lodash": "^4.17.23",
     "modern-normalize": "^3.0.1",
     "scss": "^0.2.4",

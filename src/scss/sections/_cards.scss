@@ -22,8 +22,9 @@
         flex-direction: column;
         gap: 5px;
         text-align: center;
+        justify-content: space-between;
         flex-basis: calc((100% - 14px) / 2);
-        outline: 1px solid red;
+        @include outline();
         width: 100%;
         max-width: 128px;
 
@@ -47,23 +48,18 @@
         }
 
         &-title {
-            width: 100%;
-            color: $main-title-color;
-            font-size: 14px;
-            font-weight: 700;
+            @include text(14px, 700, null, 100%, $main-title-color, null);
         }
 
         &-time {
-            width: 100%;
-            color: $main-text-color;
-            font-size: 14px;
-            font-weight: 400;
+            @include text(14px, 700, null, 100%, $main-text-color, null);
         }
 
         &-loc {
             width: 100%;
             display: flex;
             flex-direction: row;
+            justify-content: center;
             padding: 0px 5px 0px 5px;
 
             &-img {
@@ -73,9 +69,7 @@
             }
 
             &-text {
-                color: $main-text-color;
-                font-size: 12px;
-                font-weight: 600;
+                @include text(12px, 600, null, null, $main-text-color, null);
                 overflow-wrap: anywhere;
                 word-break: break-word;
             }

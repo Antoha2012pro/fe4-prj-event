@@ -18,19 +18,15 @@
     }
 
     &__title {
-        color: $main-title-color;
-        font-size: 18px;
-        font-weight: 900;
-        text-align: center;
-        width: 100%;
+        @include text(18px, 900, center, 100%, $main-title-color);
         max-width: 589px;
 
         @media (min-width: 610px) {
-            font-size: 30px;
+            @include text(30px, 900, center, 100%, $main-title-color);
         }
 
         @media (min-width: 946px) {
-            font-size: 50px;
+            @include text(50px, 900, center, 100%, $main-title-color);
         }
     }
 
@@ -54,6 +50,7 @@
             position: relative;
 
             &-input {
+                @include text(16px, 400, start, 100%, $main-text-color, Tektur);
                 padding: 10px 0px 10px 30px;
                 border-radius: 20px;
                 backdrop-filter: blur(10px);
@@ -63,9 +60,7 @@
                 width: 100%;
 
                 &::placeholder {
-                    color: $copywright-color;
-                    font-size: 16px;
-                    font-weight: 400;
+                    @include text(16px, 400, start, 100%, $copywright-color, Montserrat);
                 }
 
                 &:hover,
@@ -102,15 +97,23 @@
 
             &:last-child &-items {
                 position: absolute;
-                width: 100%;
                 top: calc(100% + 5px);
-                right: 5px;
+
+                left: 50%;
+                transform: translateX(-50%);
+
+
+                min-width: 100%;
+                width: max-content;
+                max-width: 90vw;
                 z-index: 9;
-                padding: 10px 40px 10px 40px;
+                padding: 10px 25px 10px 25px;
                 border-radius: 20px;
                 backdrop-filter: blur(10px);
                 background-color: $input-color;
-                display: block;
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
             }
 
             &:last-child &-items--hidden {
@@ -118,7 +121,36 @@
             }
 
             &:last-child &-item {
+                width: 100%;
             }
+
+            &:last-child &-item-btn {
+                width: 100%;
+                min-width: 100%;
+                background-color: transparent;
+                color: $main-text-color;
+                padding: 5px 10px 5px 10px;
+                transition: 250ms;
+                border-radius: 15px;
+
+
+                &:hover,
+                &:focus {
+                    background-color: $main-bcg-btn-color;
+                    color: $main-bcg-btn-text-color;
+                }
+            }
+
+            &:last-child &-item-text {
+                width: 100%;
+                min-width: 100%;
+                background-color: $main-bcg-error-color;
+                color: $main-text-color;
+                padding: 5px 10px 5px 10px;
+                border-radius: 10px;
+            }
+
+            &:last-child &-item {}
         }
     }
 }
