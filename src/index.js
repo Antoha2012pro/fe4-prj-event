@@ -1,7 +1,9 @@
 import debounce from "lodash/debounce";
 import { COUNTRIES } from "./shared/countries.js";
-import cardTpl from "./templates/card.hbs";
-import skeletonTpl from "./templates/skeleton.hbs";
+import cardCardTpl from "./templates/card/card.hbs";
+import cardSkeletonTpl from "./templates/card/skeleton.hbs";
+import modalModalTpl from "./templates/modal/modal.hbs";
+import modalSkeletonTpl from "./templates/modal/skeleton.hbs";
 import countryTpl from "./templates/country.hbs";
 
 const API_URL = "https://app.ticketmaster.com/discovery/v2";
@@ -22,68 +24,51 @@ const els = {
         heroInpsBoxBtnSearch: document.querySelector("#heroInpsBoxBtnSearch"),
         heroInpsBoxBtnCountry: document.querySelector("#heroInpsBoxBtnCountry"), // document.querySelector(".hero__inps-box-btn"),
         heroInpsBoxInputCountry: document.querySelector("#heroCountryBtn"),
+        modalEl: document.querySelector("#cardsModal"),
+        modalBodyEl: document.querySelector("#cardsModalContentBody"),
     }
 };
 
 // ------------------
 // ChatGPT:
 
-const modalEl = document.querySelector(".js-modal");
-const modalBodyEl = document.querySelector(".js-modal-body");
-
-const openModal = () => modalEl.classList.add("is-open");
-const closeModal = () => {
-  modalEl.classList.remove("is-open");
-  modalBodyEl.innerHTML = ""; // очищаем
+const setModalLoading = () => {
+    els.notRender.modalBodyEl.innerHTML = modalSkeletonTpl();
 };
 
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
 
-modalEl.addEventListener("click", (e) => {
-  if (e.target.closest(".js-modal-close")) closeModal();
-  if (e.target.classList.contains("js-modal-overlay")) closeModal();
-});
 
-els.notRender.cardsItems.addEventListener("click", async (e) => {
-  const target = e.target.closest("[data-event-id]");
-  if (!target) return;
+const buildModalView = (event) => {
+    const venueObj = event._embedded.venues[0];
 
-  const id = target.dataset.eventId;
-  if (!id) return;
+    return {
+        id: event.id,
+        name: event.name || "—",
+        info: event.info || "—",
+        date: event.dates.start.localDate || "—",
+        time: event.dates.start.localTime || "",
+        venue: venueObj.name || "—",
+        city: venueObj.city.name || "",
+        country: venueObj.country.name || "",
+        imgUrl: event.images.find((img) => img.ratio === "16_9").url || event.images[0].url || "",
+        url: event.url || "",
+    };
+};
 
-  openModal();
-  modalBodyEl.innerHTML = "<p>Loading...</p>";
+const showEventDetails = async (id) => {
+    openModal();
+    setModalLoading();
 
-  try {
-    const data = await fetchEventById(id);
+    try {
+        const event = await fetchEventById(id);
+        const view = buildModalView(event);
 
-    // вытащим нужное (безопасно)
-    const name = data.name ?? "—";
-    const date = data.dates?.start?.localDate ?? "—";
-    const time = data.dates?.start?.localTime ?? "";
-    const venue = data._embedded?.venues?.[0]?.name ?? "—";
-    const city = data._embedded?.venues?.[0]?.city?.name ?? "";
-    const country = data._embedded?.venues?.[0]?.country?.name ?? "";
-    const info = data.info ?? data.pleaseNote ?? "—";
-    const img = data.images?.[0]?.url ?? "";
-
-    modalBodyEl.innerHTML = `
-      <div class="event-modal">
-        ${img ? `<img class="event-modal__img" src="${img}" alt="${name}">` : ""}
-        <h2 class="event-modal__title">${name}</h2>
-        <p class="event-modal__meta">${date} ${time}</p>
-        <p class="event-modal__meta">${venue} ${city ? `• ${city}` : ""} ${country ? `• ${country}` : ""}</p>
-        <p class="event-modal__text">${info}</p>
-        ${data.url ? `<a class="event-modal__link" href="${data.url}" target="_blank" rel="noreferrer">Open on Ticketmaster</a>` : ""}
-      </div>
-    `;
-  } catch (err) {
-    console.error(err);
-    modalBodyEl.innerHTML = "<p>Не удалось загрузить детали 😢</p>";
-  }
-});
+        els.notRender.modalBodyEl.innerHTML = modalModalTpl(view);
+    } catch (err) {
+        console.error(err);
+        els.notRender.modalBodyEl.innerHTML = "<p>Не удалось загрузить детали 😢</p>";
+    }
+};
 
 // ------------------
 
@@ -92,7 +77,7 @@ const closeCountriesList = () => els.notRender.heroInpsBoxItems.classList.add("h
 
 
 const renderSkeletons = (count = 20) => {
-    els.notRender.cardsItems.innerHTML = skeletonTpl().repeat(count);
+    els.notRender.cardsItems.innerHTML = cardSkeletonTpl().repeat(count);
 }
 
 const initCountries = () => {
@@ -158,12 +143,12 @@ const fetchData = async (search, countryCode) => {
 };
 
 const fetchEventById = async (id) => {
-  const params = new URLSearchParams({ apikey: API_KEY });
-  const url = `${API_URL}/events/${id}.json?${params}`;
+    const params = new URLSearchParams({ apikey: API_KEY });
+    const url = `${API_URL}/events/${id}.json?${params}`;
 
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Ошибка загрузки деталей");
-  return res.json();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Ошибка загрузки деталей");
+    return await res.json();
 };
 
 const renderItems = (data) => {
@@ -189,7 +174,7 @@ const renderItems = (data) => {
             item.images[0].url || ""
     }));
 
-    notRender.cardsItems.innerHTML = view.map(cardTpl).join("");
+    notRender.cardsItems.innerHTML = view.map(cardCardTpl).join("");
 };
 
 const renderCountries = (events) => {
@@ -255,23 +240,46 @@ const inputsRender = () => {
         if (!el) return;
 
         selectedCountryCode = el.dataset.code;
-        els.notRender.heroInpsBoxInputCountry.value = el.dataset.name || el.textContent.trim();
+        notRender.heroInpsBoxInputCountry.value = el.dataset.name || el.textContent.trim();
 
         closeCountriesList();
 
         runSearch();
     });
+    notRender.modalEl.addEventListener("click", (event) => {
+        if (event.target.closest(".cards__modal-content-close-btn--js")) closeModal();
+        if (event.target.classList.contains("cards__modal-overlay--js")) closeModal();
+    });
+    notRender.cardsItems.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-event-id]");
+        if (!target) return;
+
+        const id = target.dataset.eventId;
+        if (!id) return;
+
+        showEventDetails(id);
+    });
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeModal();
+    });
 }
 
 const runSearch = () => {
-    const search = els.notRender.heroInpsBoxInputSearch.value.trim();
-    const typedCountry = els.notRender.heroInpsBoxInputCountry.value;
+    const { notRender } = els;
+    const search = notRender.heroInpsBoxInputSearch.value.trim();
+    const typedCountry = notRender.heroInpsBoxInputCountry.value;
 
     const countryCode = selectedCountryCode || resolveCountryCode(typedCountry);
 
     if (search.length > 2) {
         fetchData(search, countryCode || null);
     }
+};
+
+const openModal = () => els.notRender.modalEl.classList.add("is-open");
+const closeModal = () => {
+    els.notRender.modalEl.classList.remove("is-open");
+    els.notRender.modalBodyEl.innerHTML = "";
 };
 
 initCountries();

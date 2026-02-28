@@ -26,7 +26,7 @@
     }
 }
 
-@mixin outline($isActive: true) {
+@mixin outline($isActive: false) {
     @if $isActive != false {  
         outline: 1px solid red; 
     }

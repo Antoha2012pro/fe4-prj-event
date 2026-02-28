@@ -50,19 +50,19 @@
             </div>
         </section>
 
-        <div class="modal js-modal">
-            <div class="modal__overlay js-modal-overlay"></div>
-
-            <div class="modal__content">
-                <button class="modal__close js-modal-close" type="button">×</button>
-                <div class="modal__body js-modal-body"></div>
-            </div>
-        </div>
-
         <section class="cards">
             <div class="container">
                 <ul class="cards__items">
                 </ul>
+                <div class="cards__modal" id="cardsModal">
+                    <div class="cards__modal-overlay cards__modal-overlay--js"></div>
+
+                    <div class="cards__modal-content">
+                        <button class="cards__modal-content-close-btn cards__modal-content-close-btn--js" type="button">X</button>
+
+                        <div class="cards__modal-content-body"  id="cardsModalContentBody"></div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

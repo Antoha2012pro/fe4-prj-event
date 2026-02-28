@@ -1,0 +1,43 @@
+{{!-- <img class="cards__modal-content-body-img" src="{{imgUrl}}" alt="{{name}}">
+<h2 class="cards__modal-content-body-title">{{name}}</h2>
+<p class="cards__modal-content-body-text">{{name}}</p> --}}
+{{!-- {{img ? `<img class="event-modal__img" src="{{img}}" alt="{{name}}">` : ""}}
+<h2 class="event-modal__title">{{name}}</h2>
+<p class="event-modal__meta">{{date}} {{time}}</p>
+<p class="event-modal__meta">{{venue}} {{city ? `• {{city}}` : ""}} {{country ? `• {{country}}` : ""}}</p>
+<p class="event-modal__text">{{info}}</p>
+{{data.url ? `<a class="event-modal__link" href="{{data.url}}" target="_blank" rel="noreferrer">Open on
+    Ticketmaster</a>` : ""}} --}}
+
+<img src="{{imgUrl}}" alt="{{name}}" class="cards__modal-content-body-img">
+<div class="cards__modal-content-body-box">
+    <ul class="cards__modal-content-body-items">
+        <li class="cards__modal-content-body-item">
+            <h3 class="cards__modal-content-body-item-title">INFO</h3>
+            <p class="cards__modal-content-body-item-text">{{info}}</p>
+        </li>
+        <li class="cards__modal-content-body-item">
+            <h3 class="cards__modal-content-body-item-title">WHEN</h3>
+            <p class="cards__modal-content-body-item-text">{{date}} {{time}}</p>
+        </li>
+        <li class="cards__modal-content-body-item">
+            <h3 class="cards__modal-content-body-item-title">WHERE</h3>
+            <p class="cards__modal-content-body-item-text">{{city}}, {{country}}</p>
+        </li>
+        <li class="cards__modal-content-body-item">
+            <h3 class="cards__modal-content-body-item-title">WHO</h3>
+            <p class="cards__modal-content-body-item-text"></p>
+        </li>
+        <li class="cards__modal-content-body-item">
+            <h3 class="cards__modal-content-body-item-title">PRICES</h3>
+            <div class="cards__modal-content-body-item-box">
+                <p class="cards__modal-content-body-item-box-price"></p>
+                <a href="#" class="cards__modal-content-body-item-box-link">BUY TICKETS</a>
+            </div>
+            <div class="cards__modal-content-body-item-box">
+                <p class="cards__modal-content-body-item-box-price"></p>
+                <a href="#" class="cards__modal-content-body-item-box-link">BUY TICKETS</a>
+            </div>
+        </li>
+    </ul>
+</div>
