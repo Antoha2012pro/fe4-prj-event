@@ -1,17 +1,20 @@
 import debounce from "lodash/debounce";
 import { COUNTRIES } from "./shared/countries.js";
+
 import cardCardTpl from "./templates/card/card.hbs";
 import cardSkeletonTpl from "./templates/card/skeleton.hbs";
+
 import modalModalTpl from "./templates/modal/modal.hbs";
 import modalSkeletonTpl from "./templates/modal/skeleton.hbs";
+
 import countryTpl from "./templates/country.hbs";
+
+import dotTpl from "./templates/pagination/dot.hbs";
+import buttonTpl from "./templates/pagination/button.hbs";
 
 const API_URL = "https://app.ticketmaster.com/discovery/v2";
 const API_KEY = "6C50WXaQQUp17M9iU5gNHG6hsUzxmK7r";
 
-let currentPage = 20;
-let selectedCountryCode = "";
-let countriesCache = COUNTRIES;
 
 const els = {
     forRender: {
@@ -26,7 +29,27 @@ const els = {
         heroInpsBoxInputCountry: document.querySelector("#heroCountryBtn"),
         modalEl: document.querySelector("#cardsModal"),
         modalBodyEl: document.querySelector("#cardsModalContentBody"),
+        paginationEl: document.querySelector("#pagination"),
+        heroInpsBoxPaginationItems: document.querySelector(".hero__inps-box-pagination-items"),
+        heroInpsBoxBtnPagination: document.querySelector("#heroInpsBoxBtnPagination"),
+        heroInpsBoxInputPagination: document.querySelector("#heroPaginationBtn"),
     }
+};
+
+// let currentPage = 20;
+let selectedCountryCode = "";
+let countriesCache = COUNTRIES;
+
+
+const PAGE_SIZES = [10, 20, 50];
+
+let currentPage = 0;   // важно: 0-based
+let pageSize = 20;     // сколько карточек на страницу
+const state = {
+    search: "",
+    countryCode: "",
+    page: 0,     // 0-based
+    size: 20,    // pageSize
 };
 
 // ------------------
@@ -118,11 +141,14 @@ const resolveCountryCode = (raw) => {
 
 
 const fetchData = async (search, countryCode) => {
-    renderSkeletons();
+    renderSkeletons(pageSize);
+
     try {
         const params = new URLSearchParams({
             apikey: API_KEY,
-            keyword: search
+            keyword: search,
+            page: String(currentPage),
+            size: String(pageSize),
         });
 
         if (countryCode) {
@@ -163,6 +189,7 @@ const renderItems = (data) => {
     }
 
     renderCountries(events);
+    renderPagination(data);
 
     const view = events.map(item => ({
         id: item.id,
@@ -282,5 +309,128 @@ const closeModal = () => {
     els.notRender.modalBodyEl.innerHTML = "";
 };
 
+
+
+
+// ПЕРЕРОБИТИ!!!!!!!!!!!!!!!!!!!!!!
+
+const openPageSizeList = () =>
+    els.notRender.heroInpsBoxPaginationItems.classList.remove(
+        "hero__inps-box-pagination-items--hidden"
+    );
+
+const closePageSizeList = () =>
+    els.notRender.heroInpsBoxPaginationItems.classList.add(
+        "hero__inps-box-pagination-items--hidden"
+    );
+
+const togglePageSizeList = () =>
+    els.notRender.heroInpsBoxPaginationItems.classList.toggle(
+        "hero__inps-box-pagination-items--hidden"
+    );
+
+const renderPageSizes = () => {
+    els.notRender.heroInpsBoxPaginationItems.innerHTML = PAGE_SIZES
+        .map(
+            (n) => `
+      <li class="hero__inps-box-item" data-size="${n}">
+        <p class="hero__inps-box-item-text">${n}</p>
+      </li>
+    `
+        )
+        .join("");
+
+    if (!els.notRender.heroInpsBoxInputPagination.value) {
+        els.notRender.heroInpsBoxInputPagination.value = pageSize;
+    }
+};
+
+const bindPageSizeDropdown = () => {
+    const { notRender } = els;
+
+    notRender.heroInpsBoxBtnPagination.addEventListener("click", (e) => {
+        e.preventDefault();
+        togglePageSizeList();
+    });
+
+    notRender.heroInpsBoxInputPagination.addEventListener("focus", () => {
+        openPageSizeList();
+    });
+
+    notRender.heroInpsBoxPaginationItems.addEventListener("click", (event) => {
+        const li = event.target.closest("[data-size]");
+        if (!li) return;
+
+        pageSize = Number(li.dataset.size);
+        currentPage = 0;
+
+        notRender.heroInpsBoxInputPagination.value = pageSize;
+        closePageSizeList();
+
+        runSearch();
+    });
+
+    document.addEventListener("click", (e) => {
+        const inside = e.target.closest(".hero__inps-box-pagination");
+        if (!inside) closePageSizeList();
+    });
+};
+
+const buildPages = (total) => {
+    const last = total - 1;
+    const pages = [];
+
+    for (let i = 0; i < Math.min(5, total); i++) pages.push(i);
+
+    if (total > 6) {
+        pages.push("dots");
+        pages.push(last);
+    }
+
+    return pages;
+};
+
+const renderPagination = (data) => {
+    const pageInfo = data?.page;
+    if (!pageInfo) return;
+
+    const totalPages = Number(pageInfo.totalPages ?? 1);
+    const activePage = Number(pageInfo.number ?? 0);
+    currentPage = activePage;
+
+    if (totalPages <= 1) {
+        els.notRender.paginationEl.innerHTML = "";
+        return;
+    }
+
+    const pages = buildPages(totalPages);
+
+    const view = pages.map((p) => {
+        if (p === "dots") return { isDots: true };
+        return { page: p, num: p + 1, isActive: p === activePage };
+    });
+
+    els.notRender.paginationEl.innerHTML = view
+        .map((item) => (item.isDots ? dotTpl() : buttonTpl(item)))
+        .join("");
+};
+
+const bindBottomPagination = () => {
+    els.notRender.paginationEl.addEventListener("click", (event) => {
+        const btn = event.target.closest("[data-page]");
+        if (!btn) return;
+
+        currentPage = Number(btn.dataset.page);
+        runSearch();
+    });
+};
+
+const initPaginationUI = () => {
+    renderPageSizes();
+    bindPageSizeDropdown();
+    bindBottomPagination();
+};
+
 initCountries();
 inputsRender();
+initPaginationUI();

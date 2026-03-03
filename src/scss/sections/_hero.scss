@@ -33,6 +33,7 @@
     &__inps {
         display: flex;
         flex-direction: column;
+        flex-wrap: wrap;
         gap: 25px;
 
         @media (min-width: 610px) {
@@ -40,12 +41,15 @@
             gap: 30px;
         }
 
-        @media (min-width: 946px) {}
+        @media (min-width: 946px) {
+            flex-wrap: nowrap;
+        }
 
         &-box {
             display: flex;
             width: 100%;
-            max-width: 270px;
+            min-width: 200px;
+            max-width: 300px;
             flex: 1;
             position: relative;
 
@@ -81,9 +85,9 @@
             //     height: 12px;
             // }
 
-            &:last-child {}
+            &:nth-child(2) {}
 
-            &:last-child &-input {}
+            &:nth-child(2) &-input {}
 
             &:first-child &-btn {
                 fill: $copywright-color;
@@ -156,7 +160,7 @@
                 fill: $copywright-color;
             }
 
-            &:last-child &-items {
+            &:nth-child(2) &-items {
                 position: absolute;
                 top: calc(100% + 5px);
 
@@ -182,7 +186,7 @@
                 transform: translateX(-50%) translateY(0px);
             }
 
-            &:last-child &-items--hidden {
+            &:nth-child(2) &-items--hidden {
                 opacity: 0;
                 transform: translateX(-50%) translateY(-6px);
                 visibility: hidden;
@@ -190,11 +194,11 @@
                 transition: 250ms;
             }
 
-            &:last-child &-item {
+            &:nth-child(2) &-item {
                 width: 100%;
             }
 
-            &:last-child &-item-btn {
+            &:nth-child(2) &-item-btn {
                 width: 100%;
                 min-width: 100%;
                 background-color: transparent;
@@ -211,7 +215,7 @@
                 }
             }
 
-            &:last-child &-item-text {
+            &:nth-child(2) &-item-text {
                 width: 100%;
                 min-width: 100%;
                 background-color: $main-bcg-error-color;
@@ -220,9 +224,80 @@
                 border-radius: 10px;
             }
 
-            &:last-child &-item {}
+            &:nth-child(2) &-item {}
+// 2222222222222222222222222222222222
+
+
+            &:nth-child(3) &-input {}
+
+
+            &:nth-child(3) &-items {
+                position: absolute;
+                top: calc(100% + 5px);
+
+                left: 50%;
+                transform: translateX(-50%);
+
+
+                min-width: 100%;
+                width: max-content;
+                max-width: 90vw;
+                z-index: 9;
+                padding: 10px 25px 10px 25px;
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                background-color: $input-color;
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transition: 250ms;
+                transform: translateX(-50%) translateY(0px);
+            }
+
+            &:nth-child(3) &-items--hidden {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-6px);
+                visibility: hidden;
+                pointer-events: none;
+                transition: 250ms;
+            }
+
+            &:nth-child(3) &-item {
+                width: 100%;
+            }
+
+            &:nth-child(3) &-item-btn {
+                width: 100%;
+                min-width: 100%;
+                background-color: transparent;
+                color: $main-text-color;
+                padding: 5px 10px 5px 10px;
+                transition: 250ms;
+                border-radius: 15px;
+
+
+                &:hover,
+                &:focus {
+                    background-color: $main-bcg-btn-color;
+                    color: $main-bcg-btn-text-color;
+                }
+            }
+
+            &:nth-child(3) &-item-text {
+                width: 100%;
+                min-width: 100%;
+                background-color: $main-bcg-error-color;
+                color: $main-text-color;
+                padding: 5px 10px 5px 10px;
+                border-radius: 10px;
+            }
         }
     }
 }
 
-.is-hidden { display: none; }
+.is-hidden {
+    display: none;
+}

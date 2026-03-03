@@ -155,6 +155,7 @@ body {
   max-width: 946px;
   margin: 0 auto;
   padding: 0 15px;
+  outline: 1px solid red;
   transition: 500ms;
 }
 @media (min-width: 280px) {
@@ -222,6 +223,7 @@ body {
 .hero__inps {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 25px;
 }
 @media (min-width: 610px) {
@@ -230,10 +232,16 @@ body {
     gap: 30px;
   }
 }
+@media (min-width: 946px) {
+  .hero__inps {
+    flex-wrap: nowrap;
+  }
+}
 .hero__inps-box {
   display: flex;
   width: 100%;
-  max-width: 270px;
+  min-width: 200px;
+  max-width: 300px;
   flex: 1;
   position: relative;
 }
@@ -329,7 +337,7 @@ body {
   height: 10px;
   fill: #939393;
 }
-.hero__inps-box:last-child .hero__inps-box-items {
+.hero__inps-box:nth-child(2) .hero__inps-box-items {
   position: absolute;
   top: calc(100% + 5px);
   left: 50%;
@@ -352,17 +360,17 @@ body {
   transition: 250ms;
   transform: translateX(-50%) translateY(0px);
 }
-.hero__inps-box:last-child .hero__inps-box-items--hidden {
+.hero__inps-box:nth-child(2) .hero__inps-box-items--hidden {
   opacity: 0;
   transform: translateX(-50%) translateY(-6px);
   visibility: hidden;
   pointer-events: none;
   transition: 250ms;
 }
-.hero__inps-box:last-child .hero__inps-box-item {
+.hero__inps-box:nth-child(2) .hero__inps-box-item {
   width: 100%;
 }
-.hero__inps-box:last-child .hero__inps-box-item-btn {
+.hero__inps-box:nth-child(2) .hero__inps-box-item-btn {
   width: 100%;
   min-width: 100%;
   background-color: transparent;
@@ -371,11 +379,11 @@ body {
   transition: 250ms;
   border-radius: 15px;
 }
-.hero__inps-box:last-child .hero__inps-box-item-btn:hover, .hero__inps-box:last-child .hero__inps-box-item-btn:focus {
+.hero__inps-box:nth-child(2) .hero__inps-box-item-btn:hover, .hero__inps-box:nth-child(2) .hero__inps-box-item-btn:focus {
   background-color: #7c7c7c;
   color: #f1f1f1;
 }
-.hero__inps-box:last-child .hero__inps-box-item-text {
+.hero__inps-box:nth-child(2) .hero__inps-box-item-text {
   width: 100%;
   min-width: 100%;
   background-color: #c95d5d;
@@ -383,6 +391,61 @@ body {
   padding: 5px 10px 5px 10px;
   border-radius: 10px;
 }
+.hero__inps-box:nth-child(3) .hero__inps-box-items {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 100%;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: 90vw;
+  z-index: 9;
+  padding: 10px 25px 10px 25px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: 250ms;
+  transform: translateX(-50%) translateY(0px);
+}
+.hero__inps-box:nth-child(3) .hero__inps-box-items--hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-6px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: 250ms;
+}
+.hero__inps-box:nth-child(3) .hero__inps-box-item {
+  width: 100%;
+}
+.hero__inps-box:nth-child(3) .hero__inps-box-item-btn {
+  width: 100%;
+  min-width: 100%;
+  background-color: transparent;
+  color: #FFFFFF;
+  padding: 5px 10px 5px 10px;
+  transition: 250ms;
+  border-radius: 15px;
+}
+.hero__inps-box:nth-child(3) .hero__inps-box-item-btn:hover, .hero__inps-box:nth-child(3) .hero__inps-box-item-btn:focus {
+  background-color: #7c7c7c;
+  color: #f1f1f1;
+}
+.hero__inps-box:nth-child(3) .hero__inps-box-item-text {
+  width: 100%;
+  min-width: 100%;
+  background-color: #c95d5d;
+  color: #FFFFFF;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10px;
+}
+
 .is-hidden {
   display: none;
 }
@@ -410,8 +473,11 @@ body {
   text-align: center;
   justify-content: space-between;
   flex-basis: calc((100% - 14px) / 2);
+  outline: 1px solid red;
   width: 100%;
   max-width: 128px;
+  cursor: pointer;
+  transition: 250ms;
 }
 @media (min-width: 610px) {
   .cards__item {
@@ -425,6 +491,12 @@ body {
     max-width: 180px;
   }
 }
+.cards__item:hover, .cards__item:focus {
+  opacity: 0.9;
+}
+.cards__item:hover .cards__item-img, .cards__item:focus .cards__item-img {
+  border-radius: 0px 25px 0px 25px;
+}
 .cards__item-img {
   width: 100%;
   max-width: 180px;
@@ -433,6 +505,7 @@ body {
   aspect-ratio: 9/16;
   -o-object-fit: cover;
      object-fit: cover;
+  transition: 250ms;
 }
 .cards__item-title {
   font-size: 14px;

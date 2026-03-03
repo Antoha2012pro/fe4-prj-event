@@ -46,6 +46,20 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="hero__inps-box hero__inps-box-pagination">
+                        <input type="number" class="hero__inps-box-input" placeholder="Choose number" id="heroPaginationBtn"
+                            autocomplete="off" />
+                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnPagination">
+                            <svg class="hero__inps-box-img">
+                                <use href="./img/symbol-defs.svg#icon-search-btn"></use>
+                            </svg>
+                        </button>
+                        <ul class="hero__inps-box-pagination-items hero__inps-box-pagination-items--hidden">
+                            <li class="hero__inps-box-item">
+                                <p class="hero__inps-box-item-text">Enter a number in input!</p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
@@ -54,13 +68,15 @@
             <div class="container">
                 <ul class="cards__items">
                 </ul>
+                <div class="pagination" id="pagination"></div>
                 <div class="cards__modal" id="cardsModal">
                     <div class="cards__modal-overlay cards__modal-overlay--js"></div>
 
                     <div class="cards__modal-content">
-                        <button class="cards__modal-content-close-btn cards__modal-content-close-btn--js" type="button">X</button>
+                        <button class="cards__modal-content-close-btn cards__modal-content-close-btn--js"
+                            type="button">X</button>
 
-                        <div class="cards__modal-content-body"  id="cardsModalContentBody"></div>
+                        <div class="cards__modal-content-body" id="cardsModalContentBody"></div>
                     </div>
                 </div>
             </div>
