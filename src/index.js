@@ -9,8 +9,9 @@ import modalSkeletonTpl from "./templates/modal/skeleton.hbs";
 
 import countryTpl from "./templates/country.hbs";
 
-import dotTpl from "./templates/pagination/dot.hbs";
-import buttonTpl from "./templates/pagination/button.hbs";
+import paginationDotTpl from "./templates/pagination/dot.hbs";
+import paginationButtonTpl from "./templates/pagination/button.hbs";
+import paginationListTpl from "./templates/pagination/list.hbs";
 
 const API_URL = "https://app.ticketmaster.com/discovery/v2";
 const API_KEY = "6C50WXaQQUp17M9iU5gNHG6hsUzxmK7r";
@@ -25,7 +26,7 @@ const els = {
         heroInpsBoxInputSearch: document.querySelector("#heroSearchBtn"),
         heroInpsBoxItems: document.querySelector(".hero__inps-box-items"),
         heroInpsBoxBtnSearch: document.querySelector("#heroInpsBoxBtnSearch"),
-        heroInpsBoxBtnCountry: document.querySelector("#heroInpsBoxBtnCountry"), // document.querySelector(".hero__inps-box-btn"),
+        heroInpsBoxBtnCountry: document.querySelector("#heroInpsBoxBtnCountry"),
         heroInpsBoxInputCountry: document.querySelector("#heroCountryBtn"),
         modalEl: document.querySelector("#cardsModal"),
         modalBodyEl: document.querySelector("#cardsModalContentBody"),
@@ -33,10 +34,10 @@ const els = {
         heroInpsBoxPaginationItems: document.querySelector(".hero__inps-box-pagination-items"),
         heroInpsBoxBtnPagination: document.querySelector("#heroInpsBoxBtnPagination"),
         heroInpsBoxInputPagination: document.querySelector("#heroPaginationBtn"),
+        heroInpsBoxSearchItems: document.querySelector(".hero__inps-box-search-items"),
     }
 };
 
-// let currentPage = 20;
 let selectedCountryCode = "";
 let countriesCache = COUNTRIES;
 
@@ -44,7 +45,7 @@ let countriesCache = COUNTRIES;
 const PAGE_SIZES = [10, 20, 50];
 
 let currentPage = 0;   // важно: 0-based
-let pageSize = 20;     // сколько карточек на страницу
+let pageSize = 10;     // сколько карточек на страницу
 const state = {
     search: "",
     countryCode: "",
@@ -52,14 +53,9 @@ const state = {
     size: 20,    // pageSize
 };
 
-// ------------------
-// ChatGPT:
-
 const setModalLoading = () => {
     els.notRender.modalBodyEl.innerHTML = modalSkeletonTpl();
 };
-
-
 
 const buildModalView = (event) => {
     const venueObj = event._embedded.venues[0];
@@ -79,7 +75,7 @@ const buildModalView = (event) => {
 };
 
 const showEventDetails = async (id) => {
-    openModal();
+    addClassModal(els.notRender.modalEl, "is-open");
     setModalLoading();
 
     try {
@@ -92,12 +88,6 @@ const showEventDetails = async (id) => {
         els.notRender.modalBodyEl.innerHTML = "<p>Не удалось загрузить детали 😢</p>";
     }
 };
-
-// ------------------
-
-const openCountriesList = () => els.notRender.heroInpsBoxItems.classList.remove("hero__inps-box-items--hidden");;
-const closeCountriesList = () => els.notRender.heroInpsBoxItems.classList.add("hero__inps-box-items--hidden");
-
 
 const renderSkeletons = (count = 20) => {
     els.notRender.cardsItems.innerHTML = cardSkeletonTpl().repeat(count);
@@ -164,7 +154,10 @@ const fetchData = async (search, countryCode) => {
     } catch (error) {
         console.error(error);
         renderSkeletons();
-        // els.notRender.cardsItems.innerHTML = "<p>Error loading data</p>";
+        els.notRender.cardsItems.innerHTML = `
+        <li class="cards__item-error">
+            <p>Error loading data</p>
+        </li>`;
     }
 };
 
@@ -233,7 +226,6 @@ const chooseCountryLocation = (items, btn, isHiddenDef, isHiddenList) => {
     if (!isHiddenDef) return;
     btn.addEventListener("click", (event) => {
         items.classList.toggle("hero__inps-box-items--hidden");
-        // console.log(event.target);
     });
 }
 
@@ -248,7 +240,7 @@ const inputsRender = () => {
 
         selectedCountryCode = "";
 
-        openCountriesList();
+        removeClassModal(els.notRender.heroInpsBoxItems, "hero__inps-box-items--hidden");
         filterCountriesList(value);
     }, 150));
     notRender.heroInpsBoxInputSearch.addEventListener("input", debounce((event) => {
@@ -269,13 +261,27 @@ const inputsRender = () => {
         selectedCountryCode = el.dataset.code;
         notRender.heroInpsBoxInputCountry.value = el.dataset.name || el.textContent.trim();
 
-        closeCountriesList();
+        addClassModal(els.notRender.heroInpsBoxItems, "hero__inps-box-items--hidden");
 
         runSearch();
     });
+
+    notRender.heroInpsBoxInputCountry.addEventListener("focus", () => {
+        removeClassModal(notRender.heroInpsBoxSearchItems, "hero__inps-box-items--hidden", els.notRender.modalBodyEl.innerHTML = "");
+    });
+    notRender.heroInpsBoxSearchItems.addEventListener("focusout", (event) => {
+        if (!notRender.heroInpsBoxSearchItems.contains(event.relatedTarget)) {
+            addClassModal(notRender.heroInpsBoxSearchItems, "hero__inps-box-items--hidden");
+        }
+    });
+    document.addEventListener("click", (e) => {
+        const inside = e.target.closest(".hero__inps-box-search");
+        if (!inside) addClassModal(els.notRender.heroInpsBoxSearchItems, "hero__inps-box-items--hidden");
+    });
+    
     notRender.modalEl.addEventListener("click", (event) => {
-        if (event.target.closest(".cards__modal-content-close-btn--js")) closeModal();
-        if (event.target.classList.contains("cards__modal-overlay--js")) closeModal();
+        if (event.target.closest(".cards__modal-content-close-btn--js")) removeClassModal(els.notRender.modalEl, "is-open", els.notRender.modalBodyEl.innerHTML = "");
+        if (event.target.classList.contains("cards__modal-overlay--js")) removeClassModal(els.notRender.modalEl, "is-open", els.notRender.modalBodyEl.innerHTML = "");
     });
     notRender.cardsItems.addEventListener("click", (event) => {
         const target = event.target.closest("[data-event-id]");
@@ -287,7 +293,7 @@ const inputsRender = () => {
         showEventDetails(id);
     });
     window.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeModal();
+        if (event.key === "Escape") removeClassModal(els.notRender.modalEl, "is-open", els.notRender.modalBodyEl.innerHTML = "");
     });
 }
 
@@ -303,59 +309,42 @@ const runSearch = () => {
     }
 };
 
-const openModal = () => els.notRender.modalEl.classList.add("is-open");
-const closeModal = () => {
-    els.notRender.modalEl.classList.remove("is-open");
-    els.notRender.modalBodyEl.innerHTML = "";
-};
+const addClassModal = (item, className) => item.classList.add(className);
 
+const removeClassModal = (item, className, clearFunction) => {
+    item.classList.remove(className);
+    clearFunction
+}
 
-
-
-// ПЕРЕРОБИТИ!!!!!!!!!!!!!!!!!!!!!!
-
-const openPageSizeList = () =>
-    els.notRender.heroInpsBoxPaginationItems.classList.remove(
-        "hero__inps-box-pagination-items--hidden"
-    );
-
-const closePageSizeList = () =>
-    els.notRender.heroInpsBoxPaginationItems.classList.add(
-        "hero__inps-box-pagination-items--hidden"
-    );
-
-const togglePageSizeList = () =>
-    els.notRender.heroInpsBoxPaginationItems.classList.toggle(
-        "hero__inps-box-pagination-items--hidden"
-    );
+const toggleModal = (item, className) => item.classList.toggle(className);
 
 const renderPageSizes = () => {
-    els.notRender.heroInpsBoxPaginationItems.innerHTML = PAGE_SIZES
-        .map(
-            (n) => `
-      <li class="hero__inps-box-item" data-size="${n}">
-        <p class="hero__inps-box-item-text">${n}</p>
-      </li>
-    `
-        )
-        .join("");
+  els.notRender.heroInpsBoxPaginationItems.innerHTML = PAGE_SIZES
+    .map((size) => paginationListTpl({ size }))
+    .join("");
 
-    if (!els.notRender.heroInpsBoxInputPagination.value) {
-        els.notRender.heroInpsBoxInputPagination.value = pageSize;
-    }
+  if (!els.notRender.heroInpsBoxInputPagination.value) {
+    els.notRender.heroInpsBoxInputPagination.value = pageSize;
+  }
 };
 
 const bindPageSizeDropdown = () => {
     const { notRender } = els;
 
-    notRender.heroInpsBoxBtnPagination.addEventListener("click", (e) => {
-        e.preventDefault();
-        togglePageSizeList();
+    notRender.heroInpsBoxBtnPagination.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
     });
 
     notRender.heroInpsBoxInputPagination.addEventListener("focus", () => {
-        openPageSizeList();
+        removeClassModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
     });
+    notRender.heroInpsBoxPaginationItems.addEventListener("focusout", (event) => {
+        if (!notRender.heroInpsBoxPaginationItems.contains(event.relatedTarget)) {
+            addClassModal(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+        }
+    });
+
 
     notRender.heroInpsBoxPaginationItems.addEventListener("click", (event) => {
         const li = event.target.closest("[data-size]");
@@ -365,14 +354,14 @@ const bindPageSizeDropdown = () => {
         currentPage = 0;
 
         notRender.heroInpsBoxInputPagination.value = pageSize;
-        closePageSizeList();
+        addClassModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
 
         runSearch();
     });
 
     document.addEventListener("click", (e) => {
         const inside = e.target.closest(".hero__inps-box-pagination");
-        if (!inside) closePageSizeList();
+        if (!inside) addClassModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
     });
 };
 
@@ -411,7 +400,7 @@ const renderPagination = (data) => {
     });
 
     els.notRender.paginationEl.innerHTML = view
-        .map((item) => (item.isDots ? dotTpl() : buttonTpl(item)))
+        .map((item) => (item.isDots ? paginationDotTpl() : paginationButtonTpl(item)))
         .join("");
 };
 

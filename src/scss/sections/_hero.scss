@@ -225,7 +225,8 @@
             }
 
             &:nth-child(2) &-item {}
-// 2222222222222222222222222222222222
+
+            // 2222222222222222222222222222222222
 
 
             &:nth-child(3) &-input {}
@@ -234,27 +235,28 @@
             &:nth-child(3) &-items {
                 position: absolute;
                 top: calc(100% + 5px);
-
                 left: 50%;
-                transform: translateX(-50%);
-
 
                 min-width: 100%;
                 width: max-content;
                 max-width: 90vw;
+
                 z-index: 9;
-                padding: 10px 25px 10px 25px;
+                padding: 10px 25px;
                 border-radius: 20px;
                 backdrop-filter: blur(10px);
                 background-color: $input-color;
+
                 display: flex;
                 flex-direction: column;
                 gap: 7px;
+
                 opacity: 1;
                 visibility: visible;
                 pointer-events: auto;
+
                 transition: 250ms;
-                transform: translateX(-50%) translateY(0px);
+                transform: translateX(-50%) translateY(0); // ОДИН transform
             }
 
             &:nth-child(3) &-items--hidden {
