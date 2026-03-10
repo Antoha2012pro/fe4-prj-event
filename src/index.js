@@ -150,7 +150,7 @@ const fetchData = async (search, countryCode) => {
         if (!response.ok) throw new Error("Помилка");
         const data = await response.json();
 
-        renderItems(data);
+        renderItems(data || []);
     } catch (error) {
         console.error(error);
         renderSkeletons();
