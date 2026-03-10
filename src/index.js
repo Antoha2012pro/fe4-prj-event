@@ -150,7 +150,7 @@ const fetchData = async (search, countryCode) => {
         if (!response.ok) throw new Error("Помилка");
         const data = await response.json();
 
-        renderItems(data || []);
+        renderItems(data);
     } catch (error) {
         console.error(error);
         renderSkeletons();
@@ -174,9 +174,10 @@ const renderItems = (data) => {
     const { notRender } = els;
 
 
-    const events = data._embedded.events;
+    const events = data?._embedded?.events;
+    console.log(events);
 
-    if (!events.length) {
+    if (!events) {
         notRender.cardsItems.innerHTML = "<p>No results</p>";
         return;
     }
