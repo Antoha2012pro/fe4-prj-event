@@ -13,30 +13,10 @@ import paginationDotTpl from "./templates/pagination/dot.hbs";
 import paginationButtonTpl from "./templates/pagination/button.hbs";
 import paginationListTpl from "./templates/pagination/list.hbs";
 
+import { els } from "./els.js";
+
 const API_URL = "https://app.ticketmaster.com/discovery/v2";
 const API_KEY = "6C50WXaQQUp17M9iU5gNHG6hsUzxmK7r";
-
-
-const els = {
-    forRender: {
-        heroInpsBoxItems: document.querySelector(".hero__inps-box-items"),
-    },
-    notRender: {
-        cardsItems: document.querySelector('.cards__items'),
-        heroInpsBoxInputSearch: document.querySelector("#heroSearchBtn"),
-        heroInpsBoxItems: document.querySelector(".hero__inps-box-items"),
-        heroInpsBoxBtnSearch: document.querySelector("#heroInpsBoxBtnSearch"),
-        heroInpsBoxBtnCountry: document.querySelector("#heroInpsBoxBtnCountry"),
-        heroInpsBoxInputCountry: document.querySelector("#heroCountryBtn"),
-        modalEl: document.querySelector("#cardsModal"),
-        modalBodyEl: document.querySelector("#cardsModalContentBody"),
-        paginationEl: document.querySelector("#pagination"),
-        heroInpsBoxPaginationItems: document.querySelector(".hero__inps-box-pagination-items"),
-        heroInpsBoxBtnPagination: document.querySelector("#heroInpsBoxBtnPagination"),
-        heroInpsBoxInputPagination: document.querySelector("#heroPaginationBtn"),
-        heroInpsBoxSearchItems: document.querySelector(".hero__inps-box-search-items"),
-    }
-};
 
 let selectedCountryCode = "";
 let countriesCache = COUNTRIES;
@@ -44,13 +24,11 @@ let countriesCache = COUNTRIES;
 
 const PAGE_SIZES = [10, 20, 50];
 
-let currentPage = 0;   // важно: 0-based
-let pageSize = 10;     // сколько карточек на страницу
 const state = {
     search: "",
     countryCode: "",
-    page: 0,     // 0-based
-    size: 20,    // pageSize
+    page: 0,   
+    size: 20,
 };
 
 const setModalLoading = () => {
@@ -131,14 +109,14 @@ const resolveCountryCode = (raw) => {
 
 
 const fetchData = async (search, countryCode) => {
-    renderSkeletons(pageSize);
+    renderSkeletons(state.size);
 
     try {
         const params = new URLSearchParams({
             apikey: API_KEY,
             keyword: search,
-            page: String(currentPage),
-            size: String(pageSize),
+            page: String(state.page),
+            size: String(state.size),
         });
 
         if (countryCode) {
@@ -325,7 +303,7 @@ const renderPageSizes = () => {
     .join("");
 
   if (!els.notRender.heroInpsBoxInputPagination.value) {
-    els.notRender.heroInpsBoxInputPagination.value = pageSize;
+    els.notRender.heroInpsBoxInputPagination.value = state.size;
   }
 };
 
@@ -351,10 +329,10 @@ const bindPageSizeDropdown = () => {
         const li = event.target.closest("[data-size]");
         if (!li) return;
 
-        pageSize = Number(li.dataset.size);
-        currentPage = 0;
+        state.size = Number(li.dataset.size);
+        state.page = 0;
 
-        notRender.heroInpsBoxInputPagination.value = pageSize;
+        notRender.heroInpsBoxInputPagination.value = state.size;
         addClassModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
 
         runSearch();
@@ -386,7 +364,7 @@ const renderPagination = (data) => {
 
     const totalPages = Number(pageInfo.totalPages ?? 1);
     const activePage = Number(pageInfo.number ?? 0);
-    currentPage = activePage;
+    state.page = activePage;
 
     if (totalPages <= 1) {
         els.notRender.paginationEl.innerHTML = "";
@@ -410,7 +388,7 @@ const bindBottomPagination = () => {
         const btn = event.target.closest("[data-page]");
         if (!btn) return;
 
-        currentPage = Number(btn.dataset.page);
+        state.page = Number(btn.dataset.page);
         runSearch();
     });
 };
