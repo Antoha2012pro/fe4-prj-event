@@ -94,6 +94,7 @@
             max-width: 300px;
             flex: 1;
             position: relative;
+            z-index: 10;
 
             &-input {
                 @include text(16px, 400, start, 100%, $main-text-color, Tektur);

@@ -282,6 +282,7 @@ body {
   max-width: 300px;
   flex: 1;
   position: relative;
+  z-index: 10;
 }
 .hero__inps-box-input {
   font-size: 16px;
@@ -488,7 +489,7 @@ body {
 }
 
 .cards {
-  z-index: 5;
+  z-index: 3;
 }
 .cards .container {
   display: flex;
@@ -500,6 +501,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 14px;
+  z-index: 1;
 }
 @media (min-width: 610px) {
   .cards__items {
@@ -523,7 +525,6 @@ body {
   cursor: pointer;
   transition: 250ms;
   position: relative;
-  z-index: 4;
 }
 @media (min-width: 610px) {
   .cards__item {

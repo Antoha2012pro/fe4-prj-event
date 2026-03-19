@@ -1,5 +1,5 @@
 .cards {
-    z-index: 5;
+    z-index: 3;
 
     .container {
         display: flex;
@@ -12,6 +12,7 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 14px;
+        z-index: 1;
 
         @media (min-width: 610px) {
             gap: 27px;
@@ -36,7 +37,6 @@
         cursor: pointer;
         transition: 250ms;
         position: relative;
-        z-index: 4;
 
         @media (min-width: 610px) {
             flex-basis: calc((100% - 54px) / 3);
