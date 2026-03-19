@@ -146,7 +146,7 @@ address {
 }
 
 body {
-  background-color: rgb(66, 66, 66);
+  background-color: #0e0e0e;
   font-family: "Montserrat", sans-serif;
 }
 
@@ -175,7 +175,10 @@ body {
 }
 
 .hero {
+  position: relative;
   padding: 78px 0px 52px 0px;
+  overflow: hidden;
+  background-color: transparent;
 }
 @media (min-width: 610px) {
   .hero {
@@ -187,7 +190,44 @@ body {
     padding: 40px 0px 133px 0px;
   }
 }
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 102px;
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.19) 0%, rgba(14, 14, 14, 0.8) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.hero picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.hero__img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+.hero__img::after {
+  content: "";
+  position: absolute;
+  inset: auto 0px 0px 0px;
+  width: 1280px;
+  height: 102px;
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.19) 0%, rgba(14, 14, 14, 0.8) 100%);
+}
 .hero .container {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -477,6 +517,7 @@ body {
   max-width: 128px;
   cursor: pointer;
   transition: 250ms;
+  position: relative;
 }
 @media (min-width: 610px) {
   .cards__item {
@@ -495,6 +536,18 @@ body {
 }
 .cards__item:hover .cards__item-img, .cards__item:focus .cards__item-img {
   border-radius: 0px 25px 0px 25px;
+}
+.cards__item::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  left: auto;
+  width: 80%;
+  height: 200px;
+  border-radius: 50px 0;
+  border: 1px solid rgba(220, 86, 197, 0.3);
+  z-index: -1;
 }
 .cards__item-img {
   width: 100%;

@@ -27,7 +27,6 @@ export const renderItems = (data) => {
 
 
     const events = data?._embedded?.events;
-    console.log(events);
 
     if (!events) {
         notRender.cardsItems.innerHTML = "<p>No results</p>";
@@ -102,7 +101,7 @@ export const renderPagination = (data) => {
         .join("");
 };
 
-export const renderPageSizes = () => {
+export const initPageSizes = () => {
     const { notRender } = els;
 
     notRender.heroInpsBoxPaginationItems.innerHTML = state.pageSizes
@@ -110,6 +109,48 @@ export const renderPageSizes = () => {
         .join("");
 
     notRender.heroInpsBoxInputPagination.value = state.size;
+
+    notRender.heroInpsBoxBtnPagination.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+    });
+
+    notRender.heroInpsBoxInputPagination.addEventListener("focus", () => {
+        removeClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+    });
+
+    notRender.heroInpsBoxPaginationItems.addEventListener("focusout", (event) => {
+        if (!notRender.heroInpsBoxPaginationItems.contains(event.relatedTarget)) {
+            addClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+        }
+    });
+
+    notRender.heroInpsBoxPaginationItems.addEventListener("click", (event) => {
+        const li = event.target.closest("[data-size]");
+        if (!li) return;
+
+        state.size = Number(li.dataset.size);
+        state.page = 0;
+        notRender.heroInpsBoxInputPagination.value = state.size;
+
+        addClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+        runSearch();
+    });
+    
+    notRender.heroInpsBoxInputPagination.addEventListener("input", (event) => {
+        const value = event.target.valueAsNumber;
+
+        if (Number.isNaN(value)) return;
+
+        state.size = value;
+    });
+
+    document.addEventListener("click", (event) => {
+        const inside = event.target.closest(".hero__inps-box-pagination");
+        if (!inside) {
+            addClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
+        }
+    });
 };
 
 export const buildPages = (total) => {
@@ -145,7 +186,7 @@ export const showEventDetails = async (id) => {
     }
 };
 
-export const DOMElsRender = () => {
+export const initEvents = () => {
     const { notRender } = els;
     notRender.heroInpsBoxBtnSearch.disabled = true;
 
@@ -181,7 +222,7 @@ export const DOMElsRender = () => {
     });
 
     notRender.heroInpsBoxInputCountry.addEventListener("focus", () => {
-        removeClass(notRender.heroInpsBoxSearchItems, "hero__inps-box-items--hidden", els.notRender.modalBodyEl.innerHTML = "");
+        removeClass(notRender.heroInpsBoxItems, "hero__inps-box-items--hidden");
     });
     notRender.heroInpsBoxSearchItems.addEventListener("focusout", (event) => {
         if (!notRender.heroInpsBoxSearchItems.contains(event.relatedTarget)) {
@@ -210,43 +251,35 @@ export const DOMElsRender = () => {
         if (event.key === "Escape") removeClass(els.notRender.modalEl, "is-open", els.notRender.modalBodyEl.innerHTML = "");
     });
     notRender.heroInpsBoxBtnCountry.addEventListener("click", () => {
-        toggleClass(els.notRender.heroInpsBoxItems);
+        toggleClass(els.notRender.heroInpsBoxItems, "hero__inps-box-items--hidden");
     });
 };
-
-// const toggleList = (listEl) => {
-//     listEl.classList.toggle("hero__inps-box-items--hidden");
-// };
-
-// const showList = (listEl) => {
-//     listEl.classList.remove("hero__inps-box-items--hidden");
-// };
-
-// export const addClassModal = (item, className) => item.classList.add(className);
-
-// // export const removeClassModal = (item, className, clearFunction) => {
-// //     item.classList.remove(className);
-// //     clearFunction
-// // }
-
-// export const removeClassModal = (item, className, callback) => {
-//     item.classList.remove(className);
-//     if (callback) callback();
-// };
 
 export const addClass = (el, className) => el.classList.add(className);
 export const removeClass = (el, className) => el.classList.remove(className);
 export const toggleClass = (el, className) => el.classList.toggle(className);
 
-export const runSearch = () => {
+export const runSearch = async () => {
     const { notRender } = els;
     const search = notRender.heroInpsBoxInputSearch.value.trim();
     const typedCountry = notRender.heroInpsBoxInputCountry.value;
 
     const countryCode = state.selectedCountryCode || resolveCountryCode(typedCountry);
 
-    if (search.length > 2) {
-        fetchData(search, countryCode || null);
+    if (search.length <= 2) return;
+
+    renderSkeletons(state.size);
+
+    try {
+        const data = await fetchData(search, countryCode || null);
+        renderItems(data);
+    } catch (error) {
+        console.error(error);
+        els.notRender.cardsItems.innerHTML = `
+            <li class="cards__item-error">
+                <p>Error loading data</p>
+            </li>
+        `;
     }
 };
 
@@ -295,43 +328,6 @@ export const filterCountriesList = (query) => {
         const code = (el.dataset.code || "").toLowerCase();
         const match = name.includes(formattedQuery) || code.includes(formattedQuery);
         el.closest("li")?.classList.toggle("is-hidden", !match);
-    });
-};
-
-export const initPageSizeDropdown = () => {
-    const { notRender } = els;
-
-    notRender.heroInpsBoxBtnPagination.addEventListener("click", (event) => {
-        event.preventDefault();
-        toggleModal(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
-    });
-
-    notRender.heroInpsBoxInputPagination.addEventListener("focus", () => {
-        removeClass(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
-    });
-    notRender.heroInpsBoxPaginationItems.addEventListener("focusout", (event) => {
-        if (!notRender.heroInpsBoxPaginationItems.contains(event.relatedTarget)) {
-            addClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
-        }
-    });
-
-
-    notRender.heroInpsBoxPaginationItems.addEventListener("click", (event) => {
-        const li = event.target.closest("[data-size]");
-        if (!li) return;
-
-        state.size = Number(li.dataset.size);
-        state.page = 0;
-
-        notRender.heroInpsBoxInputPagination.value = state.size;
-        addClass(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
-
-        runSearch();
-    });
-
-    document.addEventListener("click", (e) => {
-        const inside = e.target.closest(".hero__inps-box-pagination");
-        if (!inside) addClass(els.notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
     });
 };
 

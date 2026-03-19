@@ -1,10 +1,11 @@
-import { DOMElsRender, initPageSizeDropdown, initBottomPagination } from "./shared/ui.js";
+import { initEvents, initPageSizes, initBottomPagination, renderCountriesList } from "./shared/ui.js";
+import { state } from "./shared/constants.js";
 
-const initFuncs = () => {
-    initPageSizeDropdown();
+const initApp = () => {
+    renderCountriesList(state.countriesCache);
+    initPageSizes();
     initBottomPagination();
-    DOMElsRender();
+    initEvents();
 };
 
-initFuncs();
- 
+initApp();

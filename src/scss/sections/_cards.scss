@@ -30,6 +30,7 @@
         max-width: 128px;
         cursor: pointer;
         transition: 250ms;
+        position: relative;
 
         @media (min-width: 610px) {
             flex-basis: calc((100% - 54px) / 3);
@@ -48,6 +49,19 @@
             #{$self}-img {
                 border-radius: 0px 25px 0px 25px;
             }
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            left: auto;
+            width: 80%;
+            height: 200px;
+            border-radius: 50px 0;
+            border: 1px solid rgba(220, 86, 197, 0.30);
+            z-index: -1;
         }
 
         &-img {

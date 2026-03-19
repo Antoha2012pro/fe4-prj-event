@@ -19,6 +19,18 @@
     </header>
     <main>
         <section class="hero">
+            <picture>
+                <source type="image/webp" srcset="./img/desktop/desktop-hero-img@1x.webp 1x, 
+                                ./img/desktop/desktop-hero-img@2x.webp 2x, 
+                                ./img/desktop/desktop-hero-img@3x.webp 3x" media="(min-width: 946px)">
+                <source type="image/webp" srcset="./img/tablet/tablet-hero-img@1x.webp 1x, 
+                                ./img/tablet/tablet-hero-img@2x.webp 2x, 
+                                ./img/tablet/tablet-hero-img@3x.webp 3x" media="(min-width: 610px)">
+                <source type="image/webp" srcset="./img/mobile/mobile-hero-img@1x.webp 1x, 
+                                ./img/mobile/mobile-hero-img@2x.webp 2x, 
+                                ./img/mobile/mobile-hero-img@3x.webp 3x" media="(max-width: 609px)">
+                <img src="./img/hero-img.webp" alt="Background" class="hero__img">
+            </picture>
             <div class="container">
                 <h2 class="hero__title">FIND BEST EVENTS AROUND THE WORLD</h2>
                 <div class="hero__inps">

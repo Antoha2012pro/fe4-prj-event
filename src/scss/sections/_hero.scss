@@ -1,5 +1,8 @@
 .hero {
+    position: relative;
     padding: 78px 0px 52px 0px;
+    overflow: hidden;
+    background-color: transparent;
 
     @media (min-width: 610px) {
         padding: 40px 0px 123px 0px;
@@ -9,7 +12,47 @@
         padding: 40px 0px 133px 0px;
     }
 
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 102px;
+        background: linear-gradient(180deg, rgba(13, 13, 13, 0.19) 0%, rgba(14, 14, 14, 0.8) 100%);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    picture {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    &__img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: auto 0px 0px 0px;
+            width: 1280px;
+            height: 102px;
+            background: linear-gradient(180deg, rgba(13, 13, 13, 0.19) 0%, rgba(14, 14, 14, 0.8) 100%);
+        }
+    }
+
     .container {
+        position: relative;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: center;
