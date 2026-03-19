@@ -155,7 +155,6 @@ body {
   max-width: 946px;
   margin: 0 auto;
   padding: 0 15px;
-  outline: 1px solid red;
   transition: 500ms;
 }
 @media (min-width: 280px) {
@@ -177,7 +176,6 @@ body {
 .hero {
   position: relative;
   padding: 78px 0px 52px 0px;
-  overflow: hidden;
   background-color: transparent;
 }
 @media (min-width: 610px) {
@@ -489,6 +487,14 @@ body {
   display: none;
 }
 
+.cards {
+  z-index: 5;
+}
+.cards .container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 .cards__items {
   display: flex;
   flex-wrap: wrap;
@@ -512,12 +518,12 @@ body {
   text-align: center;
   justify-content: space-between;
   flex-basis: calc((100% - 14px) / 2);
-  outline: 1px solid red;
   width: 100%;
   max-width: 128px;
   cursor: pointer;
   transition: 250ms;
   position: relative;
+  z-index: 4;
 }
 @media (min-width: 610px) {
   .cards__item {
@@ -537,7 +543,10 @@ body {
 .cards__item:hover .cards__item-img, .cards__item:focus .cards__item-img {
   border-radius: 0px 25px 0px 25px;
 }
-.cards__item::after {
+.cards__item:hover::after, .cards__item:focus::after {
+  border-radius: 0 25px;
+}
+.cards__item--after::after {
   content: "";
   position: absolute;
   top: -10px;
@@ -548,6 +557,8 @@ body {
   border-radius: 50px 0;
   border: 1px solid rgba(220, 86, 197, 0.3);
   z-index: -1;
+  pointer-events: none;
+  transition: 250ms;
 }
 .cards__item-img {
   width: 100%;
@@ -745,4 +756,40 @@ body {
   font-size: 16px;
   font-weight: 400;
   color: #0E0E0E;
+}
+.cards .pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+}
+.cards .pagination__btn {
+  width: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFFFFF;
+  text-align: center;
+  border-radius: 10px 0;
+  border: 1px solid transparent;
+  padding: 5px 3px 5px 3px;
+  cursor: pointer;
+  transition: 250ms;
+}
+.cards .pagination__btn:hover, .cards .pagination__btn:focus {
+  border: 1px solid #DC56C5;
+}
+.cards .pagination__btn--active {
+  font-size: 16px;
+  font-weight: 400;
+  color: #DC56C5;
+  text-align: center;
+  border: 1px solid #DC56C5;
+}
+.cards .pagination__dot {
+  line-height: 1;
+  padding: 10px 0px 0px 0px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #FFFFFF;
+  text-align: end;
 }/*# sourceMappingURL=main.css.map */

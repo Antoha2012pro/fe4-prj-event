@@ -10,11 +10,10 @@ import modalSkeletonTpl from "../templates/modal/skeleton.hbs";
 
 import countryTpl from "../templates/country.hbs";
 
-import paginationDotTpl from "../templates/pagination/dot.hbs";
-import paginationButtonTpl from "../templates/pagination/button.hbs";
+import paginationItemTpl from "../templates/pagination/item.hbs";
 import paginationListTpl from "../templates/pagination/list.hbs";
 
-import { state, els, countries } from "./constants.js";
+import { state, els } from "./constants.js";
 import { fetchData, fetchEventById } from "../api/api.js";
 
 export const getImageUrl = (images = []) => {
@@ -89,15 +88,23 @@ export const renderPagination = (data) => {
         return;
     }
 
-    const pages = buildPages(totalPages);
+    const pages = buildPages(totalPages, activePage);
 
     const view = pages.map((p) => {
-        if (p === "dots") return { isDots: true };
-        return { page: p, num: p + 1, isActive: p === activePage };
+        if (p === "dots") {
+            return { isDots: true };
+        }
+
+        return {
+            isDots: false,
+            page: p,
+            num: p + 1,
+            isActive: p === activePage,
+        };
     });
 
     els.notRender.paginationEl.innerHTML = view
-        .map((item) => (item.isDots ? paginationDotTpl() : paginationButtonTpl(item)))
+        .map((item) => paginationItemTpl(item))
         .join("");
 };
 
@@ -136,7 +143,7 @@ export const initPageSizes = () => {
         addClass(notRender.heroInpsBoxPaginationItems, "hero__inps-box-items--hidden");
         runSearch();
     });
-    
+
     notRender.heroInpsBoxInputPagination.addEventListener("input", (event) => {
         const value = event.target.valueAsNumber;
 
@@ -153,16 +160,42 @@ export const initPageSizes = () => {
     });
 };
 
-export const buildPages = (total) => {
-    const last = total - 1;
-    const pages = [];
-
-    for (let i = 0; i < Math.min(5, total); i++) pages.push(i);
-
-    if (total > 6) {
-        pages.push("dots");
-        pages.push(last);
+export const buildPages = (totalPages, currentPage) => {
+    if (totalPages <= 7) {
+        return Array.from({ length: totalPages }, (_, i) => i);
     }
+
+    const firstPage = 0;
+    const lastPage = totalPages - 1;
+    const range = 2;
+    const pages = [firstPage];
+
+    let start = currentPage - range;
+    let end = currentPage + range;
+
+    if (start < 1) {
+        start = 1;
+        end = 5;
+    }
+
+    if (end > lastPage - 1) {
+        end = lastPage - 1;
+        start = lastPage - 4;
+    }
+
+    if (start > 1) {
+        pages.push("dots");
+    }
+
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+
+    if (end < lastPage - 1) {
+        pages.push("dots");
+    }
+
+    pages.push(lastPage);
 
     return pages;
 };

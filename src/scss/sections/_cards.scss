@@ -1,6 +1,11 @@
 .cards {
+    z-index: 5;
 
-    .container {}
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
 
     &__items {
         display: flex;
@@ -31,6 +36,7 @@
         cursor: pointer;
         transition: 250ms;
         position: relative;
+        z-index: 4;
 
         @media (min-width: 610px) {
             flex-basis: calc((100% - 54px) / 3);
@@ -49,19 +55,27 @@
             #{$self}-img {
                 border-radius: 0px 25px 0px 25px;
             }
+
+            &::after {
+                border-radius: 0 25px;
+            }
         }
 
-        &::after {
-            content: "";
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            left: auto;
-            width: 80%;
-            height: 200px;
-            border-radius: 50px 0;
-            border: 1px solid rgba(220, 86, 197, 0.30);
-            z-index: -1;
+        &--after {
+            &::after {
+                content: "";
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                left: auto;
+                width: 80%;
+                height: 200px;
+                border-radius: 50px 0;
+                border: 1px solid rgba(220, 86, 197, 0.30);
+                z-index: -1;
+                pointer-events: none;
+                transition: 250ms;
+            }
         }
 
         &-img {
@@ -275,6 +289,39 @@
                 //     @include text(12px, 600, null, null, $main-text-color, null);
                 // }
             }
+        }
+    }
+
+    .pagination {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 5px;
+
+        &__btn {
+            width: 30px;
+            @include text(16px, 400, center, null, $main-text-color, null);
+            border-radius: 10px 0;
+            border: 1px solid transparent;
+            padding: 5px 3px 5px 3px;
+            cursor: pointer;
+            transition: 250ms;
+
+            &:hover,
+            &:focus {
+                border: 1px solid $main-title-color;
+            }
+
+            &--active {
+                @include text(16px, 400, center, null, $main-title-color, null);
+                border: 1px solid $main-title-color;
+            }
+        }
+
+        &__dot {
+            line-height: 1;
+            padding: 10px 0px 0px 0px;
+            @include text(18px, 400, end, null, $main-text-color, null);
         }
     }
 }

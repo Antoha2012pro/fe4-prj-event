@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVENTS</title>
+    <title>Best Events Around the World</title>
+    <meta name="description" content="Find the best events around the world by keyword, country, and page size.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,7 +38,7 @@
                     <div class="hero__inps-box">
                         <input type="text" class="hero__inps-box-input" placeholder="Start searching"
                             id="heroSearchBtn">
-                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnSearch">
+                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnSearch" aria-label="Search events">
                             <svg class="hero__inps-box-img">
                                 <use href="./img/symbol-defs.svg#icon-search-icon"></use>
                             </svg>
@@ -47,7 +48,7 @@
                         <input type="text" class="hero__inps-box-input" placeholder="Choose country" id="heroCountryBtn"
                             autocomplete="off" />
 
-                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnCountry">
+                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnCountry" aria-label="Open country list">
                             <svg class="hero__inps-box-img">
                                 <use href="./img/symbol-defs.svg#icon-search-btn"></use>
                             </svg>
@@ -59,8 +60,10 @@
                         </ul>
                     </div>
                     <div class="hero__inps-box hero__inps-box-pagination">
-                        <input type="number" class="hero__inps-box-input" placeholder="Choose number" id="heroPaginationBtn" autocomplete="off" />
-                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnPagination">
+                        <input type="number" class="hero__inps-box-input" placeholder="Choose number"
+                            id="heroPaginationBtn" autocomplete="off" />
+                        <button class="hero__inps-box-btn" id="heroInpsBoxBtnPagination"
+                            aria-label="Open page size list">
                             <svg class="hero__inps-box-img">
                                 <use href="./img/symbol-defs.svg#icon-search-btn"></use>
                             </svg>
@@ -84,8 +87,8 @@
                     <div class="cards__modal-overlay cards__modal-overlay--js"></div>
 
                     <div class="cards__modal-content">
-                        <button class="cards__modal-content-close-btn cards__modal-content-close-btn--js"
-                            type="button">X</button>
+                        <button class="cards__modal-content-close-btn cards__modal-content-close-btn--js" type="button"
+                            aria-label="Close modal">X</button>
 
                         <div class="cards__modal-content-body" id="cardsModalContentBody"></div>
                     </div>
